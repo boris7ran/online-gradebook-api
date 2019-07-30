@@ -14,7 +14,7 @@ class ProffessorsController extends Controller
      */
     public function index()
     {
-        $proffessors = Proffessor::all();
+        $proffessors = Proffessor::with('gradebook')->get();
 
         return $proffessors;
     }
@@ -56,7 +56,9 @@ class ProffessorsController extends Controller
      */
     public function show($id)
     {
-        //
+        $proffessor = Proffessor::with('gradebook')->find($id);
+
+        return $proffessor;
     }
 
     /**

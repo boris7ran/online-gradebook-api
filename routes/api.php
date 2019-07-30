@@ -19,5 +19,8 @@ Route::post('/login', 'Auth\LoginController@authenticate');
 
 Route::middleware('jwt')->post('/proffessors', 'ProffessorsController@store');
 Route::middleware('jwt')->get('/proffessors', 'ProffessorsController@index');
+Route::middleware('jwt')->get('/proffessors/{id}', 'ProffessorsController@show');
 
 Route::middleware('jwt')->post('/gradebooks', 'GradebooksController@store');
+Route::middleware('jwt')->get('/gradebooks', 'GradebooksController@index');
+Route::middleware('jwt')->get('/gradebooks/{id}', 'GradebooksController@show');

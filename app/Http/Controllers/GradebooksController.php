@@ -14,7 +14,9 @@ class GradebooksController extends Controller
      */
     public function index()
     {
-        //
+        $gradebooks = Gradebook::with('proffessor')->get();
+
+        return $gradebooks;
     }
 
     /**
@@ -53,7 +55,9 @@ class GradebooksController extends Controller
      */
     public function show($id)
     {
-        //
+        $gradebook = Gradebook::with('proffessor')->find($id);
+
+        return $gradebook;
     }
 
     /**
