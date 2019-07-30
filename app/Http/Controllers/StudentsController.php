@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Gradebook;
-use App\Comment;
 
-class GradebooksController extends Controller
+class StudentsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +13,7 @@ class GradebooksController extends Controller
      */
     public function index()
     {
-        $gradebooks = Gradebook::with('proffessor')->get();
-
-        return $gradebooks;
+        //
     }
 
     /**
@@ -38,14 +34,7 @@ class GradebooksController extends Controller
      */
     public function store(Request $request)
     {
-        $gradebook = new Gradebook();
-
-        $gradebook->name = $request->input('name');
-        $gradebook->proffessor_id = $request->input('proffessor_id');
-
-        $gradebook->save();
-
-        return $gradebook;
+        //
     }
 
     /**
@@ -56,9 +45,7 @@ class GradebooksController extends Controller
      */
     public function show($id)
     {
-        $gradebook = Gradebook::with('proffessor')->find($id);
-
-        return $gradebook;
+        //
     }
 
     /**
@@ -93,19 +80,5 @@ class GradebooksController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function commentStore(Request $request, $id)
-    {
-        \Log::info($request);
-        $comment = new Comment();
-
-        $comment->text = $request->input('text');
-        $comment->user_id = $request->input('user_id');
-        $comment->gradebook_id = $id;
-
-        $comment->save();
-
-        return $comment;
     }
 }

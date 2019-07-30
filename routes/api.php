@@ -24,3 +24,4 @@ Route::middleware('jwt')->get('/proffessors/{id}', 'ProffessorsController@show')
 Route::middleware('jwt')->post('/gradebooks', 'GradebooksController@store');
 Route::middleware('jwt')->get('/gradebooks', 'GradebooksController@index');
 Route::middleware('jwt')->get('/gradebooks/{id}', 'GradebooksController@show');
+Route::middleware('jwt')->post('/gradebooks/{id}/comments', 'GradebooksController@commentStore');
