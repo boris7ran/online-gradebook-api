@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Gradebook;
 use App\Comment;
+use Illuminate\Support\Facades\DB;
 
 class GradebooksController extends Controller
 {
@@ -56,7 +57,15 @@ class GradebooksController extends Controller
      */
     public function show($id)
     {
-        $gradebook = Gradebook::with('proffessor')->find($id);
+        // $comments = DB::table('gradebooks')
+        // ->where('gradebooks.id', '=', $id)
+        // ->leftJoin('comments', 'comments.gradebook_id', '=', 'gradebooks.id')
+        // ->leftJoin('users', 'comments.user_id', '=', 'users.id')
+        // ->leftJoin('proffessors', 'proffessors.id', '=', 'gradebooks.proffessor_id')
+        // ->select('gradebooks.name', 'users.first_name', 'users.last_name', 'proffessors.first_name', 'proffessors.last_name', 'proffessors.id', 'comments.text', 'comments.created_at')
+        // ->get();
+        
+        $gradebook = Gradebook::with('proffessor', 'comments')->find($id);
 
         return $gradebook;
     }
