@@ -14,7 +14,9 @@ class ProffessorsController extends Controller
      */
     public function index()
     {
-        //
+        $proffessors = Proffessor::all();
+
+        return $proffessors;
     }
 
     /**

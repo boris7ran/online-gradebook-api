@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Gradebook;
 
 class GradebooksController extends Controller
 {
@@ -34,7 +35,14 @@ class GradebooksController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $gradebook = new Gradebook();
+
+        $gradebook->name = $request->input('name');
+        $gradebook->proffessor_id = $request->input('proffessor_id');
+
+        $gradebook->save();
+
+        return $gradebook;
     }
 
     /**
