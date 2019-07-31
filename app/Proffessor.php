@@ -10,4 +10,9 @@ class Proffessor extends Model
     {
         return $this->hasOne(Gradebook::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

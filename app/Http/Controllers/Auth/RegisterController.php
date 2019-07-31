@@ -75,4 +75,18 @@ class RegisterController extends Controller
             $this->create($newUser);
         }
     }
+
+    public function index()
+    {
+        $users = User::with('proffessor')->get();
+        $availableUsers = [];
+
+        foreach ($users as $user) {
+            if (!$user->proffessor) {
+                array_push($availableUsers, $user);
+            }
+        }
+
+        return $availableUsers;
+    }
 }

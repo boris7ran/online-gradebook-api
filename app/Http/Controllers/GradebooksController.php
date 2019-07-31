@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Gradebook;
 use App\Comment;
+use App\Student;
 use Illuminate\Support\Facades\DB;
 
 class GradebooksController extends Controller
@@ -65,8 +66,7 @@ class GradebooksController extends Controller
         // ->select('gradebooks.name', 'users.first_name', 'users.last_name', 'proffessors.first_name', 'proffessors.last_name', 'proffessors.id', 'comments.text', 'comments.created_at')
         // ->get();
         
-        $gradebook = Gradebook::with('proffessor', 'comments')->find($id);
-
+        $gradebook = Gradebook::with('proffessor', 'comments', 'students')->find($id);
         return $gradebook;
     }
 
@@ -90,7 +90,42 @@ class GradebooksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $gradebook = Gradebook::with('students')->find($id);
+
+        $gradebook->name = $request->input('name');
+        if($gradebook->proffessor->id !== $request->input('proffessor_id')) {
+            \Log::info($request->input('proffessor_id'));
+            $gradebook->proffessor_id = $request->input('proffessor_id');
+        }
+        $newStudents = $request->input('students');
+        
+        foreach ($gradebook->students as $oldStudent) {
+            $found = false;
+            foreach ($newStudents as $newStudentKey => $newStudent) {
+                if (!array_key_exists('id', $newStudent)){
+                    $tempName = $newStudent['name'];
+                    unset($newStudents[$newStudentKey]);
+
+                    $newStudent = new Student();
+                    $newStudent->name = $tempName;
+                    $newStudent->image_link = 'randomlink.jpg';
+                    $newStudent->gradebook_id = $id;
+    
+                    $newStudent->save();
+                }
+                else if ($oldStudent->id === $newStudent['id']){
+                    $found = true;
+                }
+            }
+
+            if(!$found) {
+                $oldStudent->delete();
+            }
+        }
+
+        $gradebook->save();
+
+        return $gradebook;
     }
 
     /**
@@ -106,7 +141,6 @@ class GradebooksController extends Controller
 
     public function commentStore(Request $request, $id)
     {
-        \Log::info($request);
         $comment = new Comment();
 
         $comment->text = $request->input('text');
@@ -116,5 +150,18 @@ class GradebooksController extends Controller
         $comment->save();
 
         return $comment;
+    }
+
+    public function studentStore(Request $request, $id)
+    {
+        $student = new Student();
+
+        $student->name = $request->input('name');
+        $student->image_link = $request->input('image_link');
+        $student->gradebook_id = $id;
+
+        $student->save();
+
+        return $student;
     }
 }

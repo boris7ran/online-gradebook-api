@@ -42,6 +42,7 @@ class ProffessorsController extends Controller
         $proffessor->first_name = $request->input('first_name');
         $proffessor->last_name = $request->input('last_name');
         $proffessor->image_link = $request->input('image_link');
+        $proffessor->user_id = $request->input('user_id');
 
         $proffessor->save();
 
@@ -57,6 +58,7 @@ class ProffessorsController extends Controller
     public function show($id)
     {
         $proffessor = Proffessor::with('gradebook')->find($id);
+        \Log::info($proffessor->gradebook->students);
 
         return $proffessor;
     }
