@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Proffessor;
+use App\Comment;
 
-class ProffessorsController extends Controller
+class CommentsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +14,7 @@ class ProffessorsController extends Controller
      */
     public function index()
     {
-        $proffessors = Proffessor::with('gradebook')->get();
-
-        return $proffessors;
+        //
     }
 
     /**
@@ -37,18 +35,7 @@ class ProffessorsController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, Proffessor::STORE_RULES);
-
-        $proffessor = new Proffessor();
-
-        $proffessor->first_name = $request->input('first_name');
-        $proffessor->last_name = $request->input('last_name');
-        $proffessor->image_link = $request->input('image_link');
-        $proffessor->user_id = $request->input('user_id');
-
-        $proffessor->save();
-
-        return $proffessor;
+        //
     }
 
     /**
@@ -59,9 +46,7 @@ class ProffessorsController extends Controller
      */
     public function show($id)
     {
-        $proffessor = Proffessor::with('gradebook')->find($id);
-
-        return $proffessor;
+        //
     }
 
     /**
@@ -95,15 +80,10 @@ class ProffessorsController extends Controller
      */
     public function destroy($id)
     {
-        //
-    }
+        $comment = Comment::find($id);
 
-    public function showByUser($userId)
-    {
-        $proffessor = Proffessor::with('gradebook')->where('user_id', $userId)->first();
-        $proffessor->gradebook->students;
-        $proffessor->gradebook->comments;
+        $comment->delete();
 
-        return $proffessor;
+        return $comment;
     }
 }

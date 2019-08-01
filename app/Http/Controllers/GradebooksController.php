@@ -40,6 +40,8 @@ class GradebooksController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, Gradebook::STORE_RULES);
+
         $gradebook = new Gradebook();
 
         $gradebook->name = $request->input('name');
@@ -65,8 +67,8 @@ class GradebooksController extends Controller
         // ->leftJoin('proffessors', 'proffessors.id', '=', 'gradebooks.proffessor_id')
         // ->select('gradebooks.name', 'users.first_name', 'users.last_name', 'proffessors.first_name', 'proffessors.last_name', 'proffessors.id', 'comments.text', 'comments.created_at')
         // ->get();
-        
         $gradebook = Gradebook::with('proffessor', 'comments', 'students')->find($id);
+
         return $gradebook;
     }
 
@@ -136,7 +138,11 @@ class GradebooksController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $gradebook = Gradebook::find($id);
+
+        $gradebook->delete();
+
+        return $gradebook;
     }
 
     public function commentStore(Request $request, $id)

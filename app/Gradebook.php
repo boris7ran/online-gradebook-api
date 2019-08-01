@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Gradebook extends Model
 {
+    const STORE_RULES = [
+        'name' => 'required | min:2 | max:255',
+        'proffessor_id' => 'required',
+    ];
+
     public function proffessor()
     {
         return $this->belongsTo(Proffessor::class);

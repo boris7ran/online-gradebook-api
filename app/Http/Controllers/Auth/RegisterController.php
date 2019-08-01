@@ -47,13 +47,10 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-    }
+    // protected function validator(array $data)
+    // {
+    //     return 
+    // }
 
     /**
      * Create a new user instance after a valid registration.
@@ -69,11 +66,14 @@ class RegisterController extends Controller
         ]);
     }
 
-    public function register(Request $request){
-        $newUser = $request->only('first_name', 'last_name', 'email', 'password', 'password_confirmation');
-        if ($this->validator($newUser)){
-            $this->create($newUser);
-        }
+    public function register(Request $request){  
+        $this->validate($request, [
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed', 'regex:/^(?=.*?[0-9])/'],
+        ]);
+        $newUser = $request->only('email', 'password', 'password_confirmation');
+
+        $this->create($newUser);
     }
 
     public function index()
