@@ -124,6 +124,23 @@ class GradebooksController extends Controller
                 $oldStudent->delete();
             }
         }
+        
+
+        if (!count($gradebook->students)) {
+            foreach ($newStudents as $newStudentKey => $newStudent) {
+                \Log::info($newStudent);
+                $tempName = $newStudent['name'];
+                $tempLink = $newStudent['image_link'];
+                unset($newStudents[$newStudentKey]);
+
+                $newStudent = new Student();
+                $newStudent->name = $tempName;
+                $newStudent->image_link = $tempLink;
+                $newStudent->gradebook_id = $id;
+
+                $newStudent->save();
+            }
+        }
 
         $gradebook->save();
 

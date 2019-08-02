@@ -37,9 +37,11 @@ class ProffessorsController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, Proffessor::STORE_RULES);
+        // $this->validate($request, Proffessor::STORE_RULES);
 
         $proffessor = new Proffessor();
+
+        \Log::info($request->input('image_link'));
 
         $proffessor->first_name = $request->input('first_name');
         $proffessor->last_name = $request->input('last_name');
@@ -60,7 +62,9 @@ class ProffessorsController extends Controller
     public function show($id)
     {
         $proffessor = Proffessor::with('gradebook')->find($id);
-        $proffessor->gradebook->students;
+        if ($proffessor->gradebook) {
+            $proffessor->gradebook->students;
+        }
 
         return $proffessor;
     }
