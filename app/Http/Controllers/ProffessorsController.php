@@ -60,6 +60,7 @@ class ProffessorsController extends Controller
     public function show($id)
     {
         $proffessor = Proffessor::with('gradebook')->find($id);
+        $proffessor->gradebook->students;
 
         return $proffessor;
     }
@@ -101,8 +102,12 @@ class ProffessorsController extends Controller
     public function showByUser($userId)
     {
         $proffessor = Proffessor::with('gradebook')->where('user_id', $userId)->first();
-        $proffessor->gradebook->students;
-        $proffessor->gradebook->comments;
+        if ($proffessor){
+            if ($proffessor->gradebook) {
+                $proffessor->gradebook->students;
+                $proffessor->gradebook->comments;
+            }
+        }   
 
         return $proffessor;
     }

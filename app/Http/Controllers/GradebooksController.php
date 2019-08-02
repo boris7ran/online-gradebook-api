@@ -95,8 +95,7 @@ class GradebooksController extends Controller
         $gradebook = Gradebook::with('students')->find($id);
 
         $gradebook->name = $request->input('name');
-        if($gradebook->proffessor->id !== $request->input('proffessor_id')) {
-            \Log::info($request->input('proffessor_id'));
+        if ($gradebook->proffessor->id !== $request->input('proffessor_id')) {
             $gradebook->proffessor_id = $request->input('proffessor_id');
         }
         $newStudents = $request->input('students');
@@ -106,11 +105,12 @@ class GradebooksController extends Controller
             foreach ($newStudents as $newStudentKey => $newStudent) {
                 if (!array_key_exists('id', $newStudent)){
                     $tempName = $newStudent['name'];
+                    $tempLink = $newStudent['image_link'];
                     unset($newStudents[$newStudentKey]);
 
                     $newStudent = new Student();
                     $newStudent->name = $tempName;
-                    $newStudent->image_link = 'randomlink.jpg';
+                    $newStudent->image_link = $tempLink;
                     $newStudent->gradebook_id = $id;
     
                     $newStudent->save();
@@ -120,7 +120,7 @@ class GradebooksController extends Controller
                 }
             }
 
-            if(!$found) {
+            if (!$found) {
                 $oldStudent->delete();
             }
         }
@@ -160,14 +160,22 @@ class GradebooksController extends Controller
 
     public function studentStore(Request $request, $id)
     {
-        $student = new Student();
+        $this->validate($request, Student::STORE_RULES);
+        $students = $request->all();
+        $numOfStudents = Student::where('gradebook_id', $id)->count();  
+              
+        foreach ($students as $StudentKey => $student) {
+            if ($numOfStudents < 35 ) {
+                $newStudent = new Student();
+                $newStudent->name = $student['name'];
+                $newStudent->image_link = $student['image_link'];
+                $newStudent->gradebook_id = $id;
 
-        $student->name = $request->input('name');
-        $student->image_link = $request->input('image_link');
-        $student->gradebook_id = $id;
+                $newStudent->save();
+                $numOfStudents++;
+            }
+        }
 
-        $student->save();
-
-        return $student;
+        return $students;
     }
 }

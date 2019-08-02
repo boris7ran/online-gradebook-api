@@ -20,14 +20,14 @@ Route::post('/login', 'Auth\LoginController@authenticate');
 
 Route::middleware('jwt')->post('/proffessors', 'ProffessorsController@store');
 Route::middleware('jwt')->get('/proffessors', 'ProffessorsController@index');
-Route::middleware('jwt')->get('/proffessors/{id}', 'ProffessorsController@show');
+Route::get('/proffessors/{id}', 'ProffessorsController@show');
 Route::middleware('jwt')->get('/proffessors/{id}/user', 'ProffessorsController@showByUser');
 
 Route::middleware('jwt')->delete('/comments/{id}', 'CommentsController@destroy');
 
 Route::middleware('jwt')->post('/gradebooks', 'GradebooksController@store');
 Route::get('/gradebooks', 'GradebooksController@index');
-Route::middleware('jwt')->get('/gradebooks/{id}', 'GradebooksController@show');
+Route::get('/gradebooks/{id}', 'GradebooksController@show');
 Route::middleware('jwt')->put('/gradebooks/{id}', 'GradebooksController@update');
 Route::middleware('jwt')->delete('/gradebooks/{id}', 'GradebooksController@destroy');
 Route::middleware('jwt')->post('/gradebooks/{id}/comments', 'GradebooksController@commentStore');
